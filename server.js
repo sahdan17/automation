@@ -4,5 +4,5 @@ const PORT = process.env.PORT || 5000
 const server = http.createServer(app)
 
 server.listen(PORT, () => {
-    console.log(`🔥 Chatbot Server: System => Started on :${PORT}`)
+    console.log(`Chatbot Server: System => Started on :${PORT}`)
 })
