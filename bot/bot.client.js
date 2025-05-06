@@ -65,6 +65,8 @@ client.on('message', async (msg) => {
     const laporan = `Pesan Masuk! Dari ${senderName}` +
         (isGroup ? ` di Grup ${chatName}` : ``) + `\n` +
         messageText
+
+    // kirim laporan
 })
 
 try {
