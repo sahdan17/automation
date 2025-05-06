@@ -11,9 +11,10 @@ const client = new Client({
     restartOnAuthFail: true,
     puppeteer: {
         headless: true,
-        executablePath: process.env.NODE_ENV === "production"
-            ? "/root/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome"
-            : "C:/Users/sahda/.cache/puppeteer/chrome/win64-131.0.6778.204/chrome-win64/chrome.exe",
+        executablePath: "/root/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome",
+        // executablePath: process.env.NODE_ENV === "production"
+        //     ? "/root/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome"
+        //     : "C:/Users/sahda/.cache/puppeteer/chrome/win64-131.0.6778.204/chrome-win64/chrome.exe",
         args: [
             '--no-default-browser-check',
             '--disable-session-crashed-bubble',
