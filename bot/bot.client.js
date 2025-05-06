@@ -54,16 +54,17 @@ client.on('disconnected', () => {
 })
 
 client.on('message', async (msg) => {
-    // console.log("📩 Pesan masuk:", msg.body, "oleh: ", msg.from)
-    // if (msg.body === 'ping') {
-    //     await sendWA(msg.from, 'pong 🏓')
-    // } else if (msg.body.startsWith("!say ")) {
-    //     const content = msg.body.slice(5)
-    //     await sendWA(msg.from, `🗣️ Kamu bilang: ${content}`)
-    // } else if (msg.body === "!time") {
-    //     const now = moment().tz("Asia/Jakarta").format("dddd, DD MMM YYYY HH:mm:ss")
-    //     await sendWA(msg.from, `⏰ Sekarang jam: ${now}`)
-    // }
+    const contact = await msg.getContact()
+    const senderName = contact.name || contact.pushname || contact.number
+    const chat = await msg.getChat()
+
+    const messageText = msg.body
+    const isGroup = chat.isGroup
+    const chatName = isGroup ? chat.name : senderName
+
+    const laporan = `Pesan Masuk! Dari ${senderName}` +
+        (isGroup ? ` di Grup ${chatName}` : ``) + `\n` +
+        messageText
 })
 
 try {
