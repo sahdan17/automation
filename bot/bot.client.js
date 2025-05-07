@@ -43,7 +43,9 @@ client.on('ready', async () => {
     console.log("Nomor:", client.info.wid.user)
     botIsReady = true
 
-    await sendFailedMessages(client)
+    // await sendWA("082289002445", "bot ready")
+    sendFailedMessages()
+    // fs.writeFileSync(FAILED_MESSAGE_FILE, JSON.stringify([], 2), 'utf-8')
 })
 
 client.on('auth_failure', () => {
@@ -104,6 +106,7 @@ try {
 const sendWA = async (target, message) => {
     try {
         const targetReady = formatTarget(target)
+        console.log(targetReady)
         await client.sendMessage(targetReady, message)
         console.log(`📩 Terkirim ke ${targetReady}: ${message}`)
     } catch (err) {
@@ -114,15 +117,17 @@ const sendWA = async (target, message) => {
 
 const formatTarget = (target) => {
     if (target.startsWith("0")) {
-        return target.replace("0", "62")
+        return target.replace("0", "62") + "@c.us"
     } else if (target.startsWith("+")) {
-        return target.replace("+", "62")
+        return target.replace("+", "") + "@c.us"
     } else if (!target.endsWith("@c.us") && !target.endsWith("@g.us")) {
         return target + "@c.us"
+    } else {
+        return target
     }
 }
 
-async function sendFailedMessages(client) {
+const sendFailedMessages = async () => {
     try {
         if (!fs.existsSync(FAILED_MESSAGE_FILE)) {
             console.log("📂 Tidak ada file pesan gagal, lewati...")
@@ -138,19 +143,24 @@ async function sendFailedMessages(client) {
         }
 
         console.log(`🔄 Mengirim ${failedMessages.length} pesan yang tertunda...`)
+        const interval = 3000 * failedMessages.length
 
         for (const { target, message } of failedMessages) {
             try {
-                console.log(`📩 Mengirim ke ${target}: ${message}`)
-                await client.sendMessage(target, message)
-                console.log(`✅ Terkirim ke ${target}`)
+                const formattedTarget = formatTarget(target)
+                console.log(`📩 Mengirim ke ${formattedTarget}: ${message}`)
+
+                await sendWA(formattedTarget, message)
+                console.log(`✅ Terkirim ke ${formattedTarget}`)
             } catch (err) {
                 console.error(`❌ Gagal kirim ke ${target}:`, err.message)
             }
         }
 
-        fs.writeFileSync(FAILED_MESSAGE_FILE, JSON.stringify([], null, 2), 'utf-8')
-        console.log("🧹 Pesan gagal berhasil dikirim dan dihapus dari queue")
+        setInterval(() => {
+            fs.writeFileSync(FAILED_MESSAGE_FILE, JSON.stringify([], 2), 'utf-8')
+        }, interval)
+        console.log("🧹 Pesan gagal berhasil dikirim dan sisa pesan gagal diperbarui")
 
     } catch (err) {
         console.error("❌ Gagal membaca atau mengirim pesan gagal:", err.message)

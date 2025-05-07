@@ -6,7 +6,7 @@ const FAILED_MESSAGE_FILE = path.resolve('libs/json/failed_to_send.json')
 
 export async function getMessage(req, res) {
     const { target, message } = req.body
-    console.log("bot: ", botIsReady)
+    
     if (!botIsReady) {
         console.log('bot belum ready')
         const failedMessage = {
